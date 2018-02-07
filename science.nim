@@ -6,6 +6,13 @@ type
     Matrix* = ref object of RootObj
         elements: seq[seq[float]]
 
+proc `[]`(matrix: Matrix, i: int, j: int): float =
+    return matrix.elements[i][j]
+
+proc `[]=`(matrix: Matrix, i: int, j: int, value: float): void =
+    matrix.elements[i][j] = value
+    
+
 proc setElements(matrix: Matrix, elements: seq[seq[float]]): Matrix =
     matrix.elements = elements
     return matrix
@@ -34,7 +41,15 @@ proc isSameSizeAs*(matrix: Matrix, other: Matrix): bool =
 proc dimensions*(matrix: Matrix): (int, int) =
     return (matrix.nrows, matrix.ncols)
 
-# proc `+`*(matrix: Matrix, other: Matrix): Matrix =
+proc `+`*(matrix: Matrix, other: Matrix): Matrix =
+    let rows = matrix.nrows
+    let cols = matrix.ncols
+    let output = zeroMatrix(rows, cols)
+    for i in 0..<rows:
+        for j in 0..<cols:
+            output[i,j] = matrix[i,j] + other[i,j]
+    return output
+
 
 type
     Vector* = ref object of RootObj

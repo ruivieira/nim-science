@@ -23,6 +23,12 @@ when isMainModule:
 
     echo(repr(z))
 
+    echo("Add the two matrices")
+
+    let add = m + m2
+
+    echo(repr(add))
+
     let v = science.randomVector(10)
 
     echo(repr(v))
