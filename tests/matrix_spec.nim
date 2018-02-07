@@ -87,5 +87,17 @@ suite "Matrix specs":
 
         let c = a * b
         check(true)
+
+    test "matrix diagonal size":
+        let m = science.createMatrix(@[@[1.0,1.0,1.0], @[2.0,2.0,2.0], @[3.0,3.0,3.0]])
+        let d = m.diagonal()
+
+        check(d.len == m.nrows and d.len == m.ncols)
+    
+    test "matrix diagonal values":
+        let m = science.createMatrix(@[@[1.0,1.0,1.0], @[2.0,2.0,2.0], @[3.0,3.0,3.0]])
+        let d = m.diagonal()
+
+        check(d[0]==1.0 and d[1]==2.0 and d[2]==3.0)
     
     echo "suite teardown: everything OK?"

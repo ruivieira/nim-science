@@ -5,12 +5,11 @@ import Math
 type
     DimensionError* = object of Exception
   
-
 type 
     Matrix* = ref object of RootObj
         elements: seq[seq[float]]
 
-proc `[]`*(matrix: Matrix, i: int, j: int): float =
+proc `[]`*(matrix: Matrix, i: int, j: int): float {.noSideEffect.} =
     return matrix.elements[i][j]
 
 proc `[]=`*(matrix: Matrix, i: int, j: int, value: float): void =
@@ -35,10 +34,10 @@ proc randomMatrix*(rows: int, cols: int): Matrix =
             r[i,j] = random(1.0)
     return r
 
-proc nrows*(matrix: Matrix): int =
+proc nrows*(matrix: Matrix): int {.noSideEffect.} =
     return matrix.elements.len
 
-proc ncols*(matrix: Matrix): int =
+proc ncols*(matrix: Matrix): int {.noSideEffect.} =
     return matrix.elements[0].len
 
 proc transpose*(matrix: Matrix): Matrix =
@@ -54,16 +53,19 @@ proc clone*(matrix: Matrix): Matrix =
     let elements = matrix.elements
     return createMatrix(elements)
 
-proc isSameSizeAs*(matrix: Matrix, other: Matrix): bool =
+proc isSameSizeAs*(matrix: Matrix, other: Matrix): bool {.noSideEffect.} =
     return (matrix.elements.len == other.elements.len and matrix.elements[0].len == other.elements[0].len)
 
-proc canMultiplyFromLeft(matrix: Matrix, other: Matrix): bool =
+proc canMultiplyFromLeft(matrix: Matrix, other: Matrix): bool {.noSideEffect.} =
     return (matrix.ncols == other.nrows)
 
-proc sameSize(matrix: Matrix, other: Matrix): bool =
+proc sameSize(matrix: Matrix, other: Matrix): bool {.noSideEffect.} =
     return (matrix.nrows == other.nrows) and (matrix.ncols == other.ncols)
 
-proc dimensions*(matrix: Matrix): (int, int) =
+proc isSquare(matrix: Matrix): bool {.noSideEffect.} =
+    return (matrix.nrows == matrix.ncols)
+
+proc dimensions*(matrix: Matrix): (int, int) {.noSideEffect.} =
     return (matrix.nrows, matrix.ncols)
 
 proc `+`*(matrix: Matrix, other: Matrix): Matrix =
@@ -122,7 +124,15 @@ type
     Vector* = ref object of RootObj
         elements: seq[float]
 
+proc `[]`*(vector: Vector, i: int): float {.noSideEffect.} =
+    return vector.elements[i]
 
+proc `[]=`*(vector: Vector, i: int, value: float): void =
+    vector.elements[i] = value
+
+proc len*(vector: Vector): int {.noSideEffect.} =
+    return vector.elements.len
+    
 proc setElements(vector: Vector, elements: seq[float]): Vector =
     vector.elements = elements
     return vector
@@ -160,3 +170,14 @@ proc row*(matrix: Matrix, i: int): Vector =
     
 proc col*(matrix: Matrix, i: int): Vector =
     return createVector(map(matrix.elements, proc (x: seq[float]): float = x[i]))
+
+proc diagonal*(matrix: Matrix): Vector = 
+    if not matrix.isSquare:
+        raise newException(DimensionError, "Matrix is not square")
+
+    let rows = matrix.nrows
+    let diag = zeroVector(rows)
+    for i in 0..<rows:
+        diag[i] = matrix[i,i]
+    
+    return diag
