@@ -6,10 +6,10 @@ type
     Matrix* = ref object of RootObj
         elements: seq[seq[float]]
 
-proc `[]`(matrix: Matrix, i: int, j: int): float =
+proc `[]`*(matrix: Matrix, i: int, j: int): float =
     return matrix.elements[i][j]
 
-proc `[]=`(matrix: Matrix, i: int, j: int, value: float): void =
+proc `[]=`*(matrix: Matrix, i: int, j: int, value: float): void =
     matrix.elements[i][j] = value
     
 
@@ -49,6 +49,16 @@ proc `+`*(matrix: Matrix, other: Matrix): Matrix =
         for j in 0..<cols:
             output[i,j] = matrix[i,j] + other[i,j]
     return output
+
+proc `-`*(matrix: Matrix, other: Matrix): Matrix =
+    let rows = matrix.nrows
+    let cols = matrix.ncols
+    let output = zeroMatrix(rows, cols)
+    for i in 0..<rows:
+        for j in 0..<cols:
+            output[i,j] = matrix[i,j] - other[i,j]
+    return output
+    
 
 
 type
