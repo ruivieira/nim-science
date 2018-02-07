@@ -23,6 +23,12 @@ when isMainModule:
 
     echo(repr(z))
 
+    echo("transpose matrix")
+
+    let t = m.transpose()
+
+    echo(repr(t))
+
     echo("Add the two matrices")
 
     let add = m + m2

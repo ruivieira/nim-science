@@ -12,7 +12,6 @@ proc `[]`*(matrix: Matrix, i: int, j: int): float =
 proc `[]=`*(matrix: Matrix, i: int, j: int, value: float): void =
     matrix.elements[i][j] = value
     
-
 proc setElements(matrix: Matrix, elements: seq[seq[float]]): Matrix =
     matrix.elements = elements
     return matrix
@@ -30,6 +29,15 @@ proc nrows*(matrix: Matrix): int =
 
 proc ncols*(matrix: Matrix): int =
     return matrix.elements[0].len
+
+proc transpose*(matrix: Matrix): Matrix =
+    let nrows = matrix.nrows
+    let ncols = matrix.ncols
+    let t = zeroMatrix(ncols, nrows)
+    for i in 0..<ncols:
+        for j in 0..<nrows:
+            t[i, j] = matrix[j, i]
+    return t    
 
 proc clone*(matrix: Matrix): Matrix =
     let elements = matrix.elements

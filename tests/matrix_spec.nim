@@ -39,6 +39,16 @@ suite "Matrix specs":
         let m2 = science.zeroMatrix(4, 4)
         let add = m - m2
         check(add.nrows == 4 and add.ncols == 4)
-        
+
+    test "transpose matrix dimensions":
+        let m = science.zeroMatrix(4, 3)
+        let t = m.transpose()
+        check(t.nrows == 3 and t.ncols == 4)
+            
+    test "transpose matrix elements":
+        let m = science.createMatrix(@[@[1.0,1.0,1.0], @[2.0,2.0,2.0], @[3.0,3.0,3.0]])
+        let t = m.transpose()
+        check(t[0,0]==1.0 and t[0,1]==2.0 and t[0,2]==3.0)
+            
 
     echo "suite teardown: everything OK?"
