@@ -23,6 +23,10 @@ suite "Matrix specs":
         let m = science.zeroMatrix(4, 4)
         check(m.nrows == 4 and m.ncols == 4)
 
+    test "random matrix dimensions":
+        let m = science.randomMatrix(10, 9)
+        check(m.nrows == 10 and m.ncols == 9)
+    
     test "adding matrix dimensions":
         let m = science.zeroMatrix(4, 4)
         let m2 = science.zeroMatrix(4, 4)

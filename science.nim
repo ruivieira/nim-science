@@ -24,6 +24,13 @@ proc zeroMatrix*(rows: int, cols: int): Matrix =
     let matrix = Matrix.new()
     return matrix.setElements(newSeqWith(rows, newSeq[float](cols)))
 
+proc randomMatrix*(rows: int, cols: int): Matrix =
+    let r = zeroMatrix(rows, cols)
+    for i in 0..<rows:
+        for j in 0..<cols:
+            r[i,j] = random(1.0)
+    return r
+
 proc nrows*(matrix: Matrix): int =
     return matrix.elements.len
 
