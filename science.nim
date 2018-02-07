@@ -2,6 +2,10 @@ import sequtils
 import random
 import Math
 
+type
+    DimensionError* = object of Exception
+  
+
 type 
     Matrix* = ref object of RootObj
         elements: seq[seq[float]]
@@ -56,10 +60,16 @@ proc isSameSizeAs*(matrix: Matrix, other: Matrix): bool =
 proc canMultiplyFromLeft(matrix: Matrix, other: Matrix): bool =
     return (matrix.ncols == other.nrows)
 
+proc sameSize(matrix: Matrix, other: Matrix): bool =
+    return (matrix.nrows == other.nrows) and (matrix.ncols == other.ncols)
+
 proc dimensions*(matrix: Matrix): (int, int) =
     return (matrix.nrows, matrix.ncols)
 
 proc `+`*(matrix: Matrix, other: Matrix): Matrix =
+    if not matrix.sameSize(other):
+        raise newException(DimensionError, "Matrix dimensions do not agree")
+
     let rows = matrix.nrows
     let cols = matrix.ncols
     let output = zeroMatrix(rows, cols)
@@ -69,6 +79,9 @@ proc `+`*(matrix: Matrix, other: Matrix): Matrix =
     return output
 
 proc `-`*(matrix: Matrix, other: Matrix): Matrix =
+    if not matrix.sameSize(other):
+        raise newException(DimensionError, "Matrix dimensions do not agree")
+
     let rows = matrix.nrows
     let cols = matrix.ncols
     let output = zeroMatrix(rows, cols)
@@ -78,9 +91,11 @@ proc `-`*(matrix: Matrix, other: Matrix): Matrix =
     return output
     
 proc `*`*(matrix: Matrix, other: Matrix): Matrix =
+    if not matrix.canMultiplyFromLeft(other):
+        raise newException(DimensionError, "Matrix dimensions do not agree")
+
     let aRows = matrix.nrows
     let aCols = matrix.ncols
-    let bRows = other.nrows
     let bCols = other.ncols
 
     let c = zeroMatrix(aRows, bCols)
@@ -91,7 +106,17 @@ proc `*`*(matrix: Matrix, other: Matrix): Matrix =
                 c[i,j] = c[i,j] + matrix[i, k] * other[k, j]
     return c
 
+proc map*(matrix: Matrix, f: proc(x:float, i, j: int):float): Matrix =
+    let rows = matrix.nrows
+    let cols = matrix.ncols
+    let output = zeroMatrix(rows, cols)
+    for i in 0..<rows:
+        for j in 0..<cols:
+            output[i,j] = f(matrix[i,j], i, j)
+    return output
 
+proc abs*(matrix: Matrix): Matrix =
+    return matrix.map(proc(x: float, i: int, j: int):float = abs(x))
 
 type
     Vector* = ref object of RootObj

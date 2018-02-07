@@ -37,13 +37,27 @@ suite "Matrix specs":
         let m = science.createMatrix(@[@[1.0,1.0,1.0], @[2.0,2.0,2.0], @[3.0,3.0,3.0]])
         let a = m + m
         check((a[0,0] == 2.0) and (a[1,1] == 4.0) and (a[2, 2] == 6.0))
+
+    test "adding invalid dimensions":
+        let a = zeroMatrix(5, 6)
+        let b = zeroMatrix(3, 7)
         
+        expect DimensionError:
+            let c = a + b
+    
     test "subtracting matrix dimensions":
         let m = science.zeroMatrix(4, 4)
         let m2 = science.zeroMatrix(4, 4)
         let add = m - m2
         check(add.nrows == 4 and add.ncols == 4)
 
+    test "subtracting invalid dimensions":
+        let a = zeroMatrix(5, 6)
+        let b = zeroMatrix(3, 7)
+        
+        expect DimensionError:
+            let c = a - b
+    
     test "transpose matrix dimensions":
         let m = science.zeroMatrix(4, 3)
         let t = m.transpose()
@@ -54,5 +68,24 @@ suite "Matrix specs":
         let t = m.transpose()
         check(t[0,0]==1.0 and t[0,1]==2.0 and t[0,2]==3.0)
             
+    test "abs() matrix values":
+        let m = science.createMatrix(@[@[-1.0,1.0,-1.0], @[2.0,-2.0,2.0], @[3.0,3.0,-3.0]])
+        let a = m.abs()
+        check(a[0,0]==1.0 and a[0,1]==1.0 and a[0,2]==1.0)
+        check(m.nrows == a.nrows and m.ncols == a.ncols)
 
+    test "invalid multiplication":
+        let a = zeroMatrix(5, 6)
+        let b = zeroMatrix(3, 7)
+
+        expect DimensionError:
+            let c = a * b
+
+    test "valid multiplication":
+        let a = zeroMatrix(5, 6)
+        let b = zeroMatrix(6, 5)
+
+        let c = a * b
+        check(true)
+    
     echo "suite teardown: everything OK?"
