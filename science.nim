@@ -53,6 +53,9 @@ proc clone*(matrix: Matrix): Matrix =
 proc isSameSizeAs*(matrix: Matrix, other: Matrix): bool =
     return (matrix.elements.len == other.elements.len and matrix.elements[0].len == other.elements[0].len)
 
+proc canMultiplyFromLeft(matrix: Matrix, other: Matrix): bool =
+    return (matrix.ncols == other.nrows)
+
 proc dimensions*(matrix: Matrix): (int, int) =
     return (matrix.nrows, matrix.ncols)
 
@@ -74,6 +77,20 @@ proc `-`*(matrix: Matrix, other: Matrix): Matrix =
             output[i,j] = matrix[i,j] - other[i,j]
     return output
     
+proc `*`*(matrix: Matrix, other: Matrix): Matrix =
+    let aRows = matrix.nrows
+    let aCols = matrix.ncols
+    let bRows = other.nrows
+    let bCols = other.ncols
+
+    let c = zeroMatrix(aRows, bCols)
+
+    for i in 0..<aRows:
+        for j in 0..<bCols:
+            for k in 0..<aCols:
+                c[i,j] = c[i,j] + matrix[i, k] * other[k, j]
+    return c
+
 
 
 type
