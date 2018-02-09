@@ -134,3 +134,8 @@ proc diagonal*(matrix: Matrix): Vector =
         diag[i] = matrix[i,i]
     
     return diag
+
+proc fillMatrix*(i: int, j: int, fill: proc(i: int, j: int): float): Matrix =
+    let matrix = zeroMatrix(i, j)
+    return matrix.map(proc(x: float, i: int, j: int):float = fill(i, j))
+

@@ -17,8 +17,8 @@ proc randn(n: int): seq[float] =
   return newSeqWith(n, randn())
 
 
-proc rnorm(mean: float, std: float): float =
+proc rnorm*(mean: float, std: float): float =
   return randn() * std + mean
 
-proc rnorm(n: int, mean: float, std: float): seq[float] =
+proc rnorm*(n: int, mean: float, std: float): seq[float] =
   return newSeqWith(n, rnorm(mean, std))
