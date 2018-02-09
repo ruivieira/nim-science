@@ -2,6 +2,7 @@ import unittest
 import "../science/Matrix"
 import "../science/Vector"
 import "../science/Exceptions"
+import "../science/Distributions"
 
 suite "Matrix specs":
     echo "suite setup: run once before the tests"
@@ -101,5 +102,14 @@ suite "Matrix specs":
         let d = m.diagonal()
 
         check(d[0]==1.0 and d[1]==2.0 and d[2]==3.0)
+
+    test "matrix fill":
+        let m = fillMatrix(5, 5, proc(i: int, j: int): float = rnorm(1.0, 2.0))
+        check(m.ncols==5 and m.nrows==5)
+
+    test "matrix entries":
+        let m = fillMatrix(5, 5, proc(i: int, j: int): float = rnorm(1.0, 2.0))
+        let e = m.entries()
+        check(e.len == 25)
     
     echo "suite teardown: everything OK?"

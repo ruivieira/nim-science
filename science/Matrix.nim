@@ -7,11 +7,16 @@ type
     Matrix* = ref object of RootObj
         elements: seq[seq[float]]
 
+    MatrixEntry* = ref object of RootObj
+        row: int
+        col: int
+        value: float
+
 proc `[]`*(matrix: Matrix, i: int, j: int): float {.noSideEffect.} =
     return matrix.elements[i][j]
 
 proc `[]=`*(matrix: Matrix, i: int, j: int, value: float): void =
-    matrix.elements[i][j] = value
+    matrix.elements[i][j] = value    
     
 proc setElements(matrix: Matrix, elements: seq[seq[float]]): Matrix =
     matrix.elements = elements
@@ -138,4 +143,13 @@ proc diagonal*(matrix: Matrix): Vector =
 proc fillMatrix*(i: int, j: int, fill: proc(i: int, j: int): float): Matrix =
     let matrix = zeroMatrix(i, j)
     return matrix.map(proc(x: float, i: int, j: int):float = fill(i, j))
+
+proc entries*(matrix: Matrix): seq[MatrixEntry] =
+    let nrows = matrix.nrows
+    let ncols = matrix.ncols
+    var output: seq[MatrixEntry] = @[]
+    for i in 0..<nrows:
+        for j in 0..<ncols:
+            output.add(MatrixEntry(row: i, col: j, value: matrix[i,j]))
+    return output
 
