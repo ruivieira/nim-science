@@ -1,2 +1,4 @@
 nimcache/
 *_spec
+examples/.ipynb_checkpoints
+examples/inimtemp

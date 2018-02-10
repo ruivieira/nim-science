@@ -8,9 +8,9 @@ type
         elements: seq[seq[float]]
 
     MatrixEntry* = ref object of RootObj
-        row: int
-        col: int
-        value: float
+        row*: int
+        col*: int
+        value*: float
 
 proc `[]`*(matrix: Matrix, i: int, j: int): float {.noSideEffect.} =
     return matrix.elements[i][j]
