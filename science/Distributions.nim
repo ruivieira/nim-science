@@ -1,5 +1,5 @@
 import random
-from math import ln
+from math import ln, exp
 from system import abs
 import sequtils
 
@@ -22,3 +22,15 @@ proc rnorm*(mean: float, std: float): float =
 
 proc rnorm*(n: int, mean: float, std: float): seq[float] =
   return newSeqWith(n, rnorm(mean, std))
+
+proc rpois*(mean: int): int =
+  var p = 1.0
+  var k = 0
+  let L = exp(-float(mean));
+  while (p > L):
+    inc(k)
+    p = p * random(1.0)
+  return k - 1
+
+proc rpois*(n: int, mean: int): seq[int] =
+  return newSeqWith(n, rpois(mean))
