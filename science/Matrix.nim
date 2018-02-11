@@ -153,3 +153,6 @@ proc entries*(matrix: Matrix): seq[MatrixEntry] =
             output.add(MatrixEntry(row: i, col: j, value: matrix[i,j]))
     return output
 
+proc elements*(matrix: Matrix): seq[seq[float]] =
+    return matrix.elements
+
