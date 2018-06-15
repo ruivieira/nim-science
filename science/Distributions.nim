@@ -1,13 +1,13 @@
 import random
-from math import ln, exp
+from math import ln, exp, sqrt, pow, tan, PI
 from system import abs
 import sequtils
 
 proc randn(): float =
   var q, v, u, x, y = 100.0
   while (q > 0.27597 and (q > 0.27846 or v * v > -4 * ln(u) * u * u)):
-    u = random(1.0)
-    v = 1.7156 * (random(1.0) - 0.5)
+    u = rand(1.0)
+    v = 1.7156 * (rand(1.0) - 0.5)
     x = u - 0.449871
     y = abs(v) + 0.386595
     q = x * x + y * (0.19600 * y - 0.25472 * x)
@@ -34,3 +34,46 @@ proc rpois*(mean: int): int =
 
 proc rpois*(n: int, mean: int): seq[int] =
   return newSeqWith(n, rpois(mean))
+
+proc rexp*(rate: float): float =
+  # rate must be > 0
+  return -1.0 / rate * ln(1.0 - rand(1.0))
+
+proc rexp*(n: int, rate: float): seq[float] =
+  return newSeqWith(n, rexp(rate))
+
+proc randg(shape: float): float =
+  let p = exp(1.0) / (shape + exp(1.0))
+  if shape == 1.0:
+    return rexp(1.0)
+  elif shape > 1.0:
+    while true:
+        var y = tan(PI * rand(1.0))
+        var x = sqrt(2.0 * shape - 1.0) * y + shape - 1.0
+        if x <= 0.0:
+          continue
+        if (rand(1.0) > (1.0 + y * y) * exp((shape - 1.0) * ln(x / (shape - 1.0)) - sqrt(2.0 * shape - 1.0) * y)):
+            continue
+        return x
+  else:
+    while true:
+      var u = rand(1.0)
+      var y = rexp(1.0)
+      var x, q = 0.0
+      if u < p:
+        x = exp(-y / shape)
+        q = p * exp(-x)
+      else:
+        x = 1.0 + y
+        q = p + (1.0 - p) * pow(x, shape - 1.0)
+                
+      if u >= q:
+        continue
+
+      return x
+
+proc rgamma*(shape: float, scale: float): float =
+  randg(shape) * scale
+
+proc rgamma*(n: int, shape: float, scale: float): seq[float] =
+  return newSeqWith(n, rgamma(shape, scale))
