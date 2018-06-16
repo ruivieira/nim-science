@@ -9,3 +9,8 @@
 * Poisson
 * Exponential
 * Gamma
+
+### linear algebra
+
+* Matrices
+* Vectors

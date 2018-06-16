@@ -16,7 +16,6 @@ proc randn(): float =
 proc randn(n: int): seq[float] =
   return newSeqWith(n, randn())
 
-
 proc rnorm*(mean: float, std: float): float =
   return randn() * std + mean
 
