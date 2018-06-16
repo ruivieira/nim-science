@@ -44,15 +44,16 @@ proc rexp*(n: int, rate: float): seq[float] =
 
 proc randg(shape: float): float =
   let p = exp(1.0) / (shape + exp(1.0))
+  let s = shape - 1.0
   if shape == 1.0:
     return rexp(1.0)
   elif shape > 1.0:
     while true:
         var y = tan(PI * rand(1.0))
-        var x = sqrt(2.0 * shape - 1.0) * y + shape - 1.0
+        var x = sqrt(2.0 * s) * y + s
         if x <= 0.0:
           continue
-        if (rand(1.0) > (1.0 + y * y) * exp((shape - 1.0) * ln(x / (shape - 1.0)) - sqrt(2.0 * shape - 1.0) * y)):
+        if (rand(1.0) > (1.0 + y * y) * exp((s) * ln(x / s) - sqrt(2.0 * s) * y)):
             continue
         return x
   else:
@@ -65,7 +66,7 @@ proc randg(shape: float): float =
         q = p * exp(-x)
       else:
         x = 1.0 + y
-        q = p + (1.0 - p) * pow(x, shape - 1.0)
+        q = p + (1.0 - p) * pow(x, s)
                 
       if u >= q:
         continue
