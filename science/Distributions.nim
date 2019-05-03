@@ -77,3 +77,6 @@ proc rgamma*(shape: float, scale: float): float =
 
 proc rgamma*(n: int, shape: float, scale: float): seq[float] =
   return newSeqWith(n, rgamma(shape, scale))
+
+proc runif*() : float = rand(1.0)
+proc runif*(n: int): seq[float] = newSeqWith(n, rand(1.0))
