@@ -14,3 +14,5 @@
 
 * Matrices
 * Vectors
+* Metrics
+  * Squared distance
